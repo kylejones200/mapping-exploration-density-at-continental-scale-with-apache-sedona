@@ -1,6 +1,12 @@
 import sys
 import os
 
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 # Add parent directory to path to import plot_style
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from plot_style import set_tufte_defaults, apply_tufte_style, save_tufte_figure, COLORS
@@ -72,7 +78,7 @@ def generate_drillhole_data():
 
 def create_main_density_heatmap():
     """Create hexagonal density heat map."""
-    print("Generating main drill hole density visualization...")
+    logger.info("Generating main drill hole density visualization...")
     
     df = generate_drillhole_data()
     
@@ -183,27 +189,27 @@ def create_main_density_heatmap():
                 dpi=300, bbox_inches='tight')
     plt.close()
     
-    print(f"✓ Main density heatmap saved")
-    print(f"  Total hexagons: {len(hex_stats)}")
-    print(f"  Coverage: {pct_explored:.1f}%")
+    logger.info(f"✓ Main density heatmap saved")
+    logger.info(f"  Total hexagons: {len(hex_stats)}")
+    logger.info(f"  Coverage: {pct_explored:.1f}%")
 
 def main():
     """Generate all visualizations for Blog 21."""
     set_tufte_defaults()
-    print("="*70)
-    print("Blog 21: Sedona Drill Hole Analytics - Visualizations")
-    print("="*70)
-    print()
+    logger.info("="*70)
+    logger.info("Blog 21: Sedona Drill Hole Analytics - Visualizations")
+    logger.info("="*70)
+    logger.info()
     
     create_main_density_heatmap()
     
-    print()
-    print("="*70)
-    print("All visualizations generated successfully!")
-    print("="*70)
-    print()
-    print("Files created:")
-    print("  - 21_sedona_drillholes_main.png")
+    logger.info()
+    logger.info("="*70)
+    logger.info("All visualizations generated successfully!")
+    logger.info("="*70)
+    logger.info()
+    logger.info("Files created:")
+    logger.info("  - 21_sedona_drillholes_main.png")
 
 if __name__ == "__main__":
     main()
