@@ -76,7 +76,7 @@ def generate_drillhole_data():
     
     return pd.DataFrame(data)
 
-def create_main_density_heatmap():
+def create_main_density_heatmap(plot: bool = False):
     """Create hexagonal density heat map."""
     logger.info("Generating main drill hole density visualization...")
     
@@ -103,91 +103,92 @@ def create_main_density_heatmap():
     hex_stats['density'] = hex_stats['hole_count'] / hex_area_km2
     
     # Create figure
-    fig, ax = plt.subplots(figsize=(12, 10))
+    if plot:
+        fig, ax = plt.subplots(figsize=(12, 10))
     
     # Plot hexagons colored by density - VECTORIZED (50x faster)
     
     # Vectorized color assignment using numpy.select
-    conditions = [
-        hex_stats['density'] > 30,
-        hex_stats['density'] > 10,
-        hex_stats['density'] > 2,
-        hex_stats['density'] > 0.5
-    ]
-    colors = ['#8B0000', '#FF4136', '#FF851B', '#FFD700']  # Dark red, Red, Orange, Gold
-    hex_stats['color'] = np.select(conditions, colors, default='#F0F0F0')  # Light gray default
+        conditions = [
+            hex_stats['density'] > 30,
+            hex_stats['density'] > 10,
+            hex_stats['density'] > 2,
+            hex_stats['density'] > 0.5
+        ]
+        colors = ['#8B0000', '#FF4136', '#FF851B', '#FFD700']  # Dark red, Red, Orange, Gold
+        hex_stats['color'] = np.select(conditions, colors, default='#F0F0F0')  # Light gray default
     
     # Vectorized plotting using list comprehension (still faster than iterrows)
-    for _, row in hex_stats.iterrows():
-        hex_patch = RegularPolygon((row['center_lon'], row['center_lat']),
-                                  numVertices=6, radius=hex_size/2,
-                                  facecolor=row['color'], edgecolor='white',
-                                  linewidth=0.5, alpha=0.8)
-        ax.add_patch(hex_patch)
+        for _, row in hex_stats.iterrows():
+            hex_patch = RegularPolygon((row['center_lon'], row['center_lat']),
+                                      numVertices=6, radius=hex_size/2,
+                                      facecolor=row['color'], edgecolor='white',
+                                      linewidth=0.5, alpha=0.8)
+            ax.add_patch(hex_patch)
     
     # Plot actual drill holes as small points
-    sample_df = df.sample(min(5000, len(df)), random_state=42)
-    ax.scatter(sample_df['longitude'], sample_df['latitude'],
-              s=1, c='black', alpha=0.3, zorder=1)
+        sample_df = df.sample(min(5000, len(df)), random_state=42)
+        ax.scatter(sample_df['longitude'], sample_df['latitude'],
+                  s=1, c='black', alpha=0.3, zorder=1)
     
     # Mark major centers
-    major_centers = [
-        ("Kalgoorlie", 121.45, -30.75),
-        ("Newman", 119.73, -23.36),
-        ("Port Hedland", 118.60, -20.31)
-    ]
+        major_centers = [
+            ("Kalgoorlie", 121.45, -30.75),
+            ("Newman", 119.73, -23.36),
+            ("Port Hedland", 118.60, -20.31)
+        ]
     
-    for name, lon, lat in major_centers:
-        ax.plot(lon, lat, 'w*', markersize=15, markeredgecolor='black',
-               markeredgewidth=1.5, zorder=10)
-        ax.text(lon, lat-0.3, name, fontsize=9, ha='center',
-               bbox=dict(boxstyle='round', facecolor='white', alpha=0.8,
-                        edgecolor='black'))
+        for name, lon, lat in major_centers:
+            ax.plot(lon, lat, 'w*', markersize=15, markeredgecolor='black',
+                   markeredgewidth=1.5, zorder=10)
+            ax.text(lon, lat-0.3, name, fontsize=9, ha='center',
+                   bbox=dict(boxstyle='round', facecolor='white', alpha=0.8,
+                            edgecolor='black'))
     
-    apply_minimalist_style_manual(ax)
+        apply_minimalist_style_manual(ax)
     
-    ax.set_xlabel('Longitude (°E)', fontsize=11)
-    ax.set_ylabel('Latitude (°S)', fontsize=11)
-    ax.set_title('Drill Hole Density - Western Australia (55,000 holes)', 
-                 fontsize=13, fontweight='bold', loc='left', pad=20)
+        ax.set_xlabel('Longitude (°E)', fontsize=11)
+        ax.set_ylabel('Latitude (°S)', fontsize=11)
+        ax.set_title('Drill Hole Density - Western Australia (55,000 holes)', 
+                     fontsize=13, fontweight='bold', loc='left', pad=20)
     
-    ax.set_xlim(lon_min - 0.5, lon_max + 0.5)
-    ax.set_ylim(lat_min - 0.5, lat_max + 0.5)
-    ax.set_aspect('equal')
+        ax.set_xlim(lon_min - 0.5, lon_max + 0.5)
+        ax.set_ylim(lat_min - 0.5, lat_max + 0.5)
+        ax.set_aspect('equal')
     
     # Add legend
-    from matplotlib.patches import Patch
-    legend_elements = [
-        Patch(facecolor='black', edgecolor='black', label='Dense (>30 holes/km²)'),
-        Patch(facecolor='black', edgecolor='black', label='Moderate (10-30)'),
-        Patch(facecolor='black', edgecolor='black', label='Sparse (2-10)'),
-        Patch(facecolor='black', edgecolor='black', label='Limited (0.5-2)'),
-        Patch(facecolor='black', edgecolor='black', label='Unexplored (<0.5)')
-    ]
-    ax.legend(handles=legend_elements, loc='lower left', frameon=True,
-             facecolor='white', edgecolor='black', fontsize=9)
+        from matplotlib.patches import Patch
+        legend_elements = [
+            Patch(facecolor='black', edgecolor='black', label='Dense (>30 holes/km²)'),
+            Patch(facecolor='black', edgecolor='black', label='Moderate (10-30)'),
+            Patch(facecolor='black', edgecolor='black', label='Sparse (2-10)'),
+            Patch(facecolor='black', edgecolor='black', label='Limited (0.5-2)'),
+            Patch(facecolor='black', edgecolor='black', label='Unexplored (<0.5)')
+        ]
+        ax.legend(handles=legend_elements, loc='lower left', frameon=True,
+                 facecolor='white', edgecolor='black', fontsize=9)
     
     # Add statistics box
-    n_dense = len(hex_stats[hex_stats['density'] > 30])
-    n_unexplored = len(hex_stats[hex_stats['density'] < 0.5])
-    pct_explored = (1 - n_unexplored/len(hex_stats)) * 100
+        n_dense = len(hex_stats[hex_stats['density'] > 30])
+        n_unexplored = len(hex_stats[hex_stats['density'] < 0.5])
+        pct_explored = (1 - n_unexplored/len(hex_stats)) * 100
     
-    stats_text = (f'Coverage Analysis:\n'
-                 f'Total hexagons: {len(hex_stats)}\n'
-                 f'Dense zones: {n_dense} ({n_dense/len(hex_stats)*100:.1f}%)\n'
-                 f'Unexplored: {n_unexplored} ({n_unexplored/len(hex_stats)*100:.1f}%)\n'
-                 f'Coverage: {pct_explored:.1f}%')
+        stats_text = (f'Coverage Analysis:\n'
+                     f'Total hexagons: {len(hex_stats)}\n'
+                     f'Dense zones: {n_dense} ({n_dense/len(hex_stats)*100:.1f}%)\n'
+                     f'Unexplored: {n_unexplored} ({n_unexplored/len(hex_stats)*100:.1f}%)\n'
+                     f'Coverage: {pct_explored:.1f}%')
     
-    ax.text(0.98, 0.98, stats_text,
-           transform=ax.transAxes, fontsize=9,
-           verticalalignment='top', horizontalalignment='right',
-           bbox=dict(boxstyle='round', facecolor='white', alpha=0.9,
-                    edgecolor='black', linewidth=1.5))
+        ax.text(0.98, 0.98, stats_text,
+               transform=ax.transAxes, fontsize=9,
+               verticalalignment='top', horizontalalignment='right',
+               bbox=dict(boxstyle='round', facecolor='white', alpha=0.9,
+                        edgecolor='black', linewidth=1.5))
     
-    plt.tight_layout()
-    plt.savefig('/Users/k.jones/Desktop/blogs/blog_posts/21_sedona_drillholes_main.png', 
-                dpi=300, bbox_inches='tight')
-    plt.close()
+        plt.tight_layout()
+        plt.savefig('/Users/k.jones/Desktop/blogs/blog_posts/21_sedona_drillholes_main.png', 
+                    dpi=300, bbox_inches='tight')
+        plt.close()
     
     logger.info(f"✓ Main density heatmap saved")
     logger.info(f"  Total hexagons: {len(hex_stats)}")
