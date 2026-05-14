@@ -1,3 +1,4 @@
+import signalplot
 import sys
 import os
 
@@ -7,9 +8,6 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
-# Add parent directory to path to import plot_style
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from plot_style import set_tufte_defaults, apply_tufte_style, save_tufte_figure, COLORS
 
 """
 Visualization generation for Blog 21: Spatial Drill Hole Analytics with Sedona
@@ -23,20 +21,12 @@ from matplotlib.patches import RegularPolygon
 import warnings
 
 
-# Add parent directory to path to import plot_style
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# Import Tufte plotting utilities
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent.parent))
-from tda_utils import setup_tufte_plot, TufteColors
-
-
 warnings.filterwarnings('ignore')
 
 def apply_minimalist_style_manual(ax):
     """Apply minimalist style components manually to axis."""
-    plt.rcParams["font.family"] = "serif"
     
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
@@ -192,7 +182,7 @@ def create_main_density_heatmap(plot: bool = False):
 
 def main():
     """Generate all visualizations for Blog 21."""
-    set_tufte_defaults()
+    signalplot.apply(font_family='serif')
     logger.info("Blog 21: Sedona Drill Hole Analytics - Visualizations")
     logger.info()
     
