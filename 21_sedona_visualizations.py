@@ -18,12 +18,10 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.patches import RegularPolygon
-import warnings
 
 
 
 from pathlib import Path
-warnings.filterwarnings('ignore')
 
 def apply_minimalist_style_manual(ax):
     """Apply minimalist style components manually to axis."""
