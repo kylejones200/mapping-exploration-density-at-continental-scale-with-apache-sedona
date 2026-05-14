@@ -197,17 +197,13 @@ def create_main_density_heatmap(plot: bool = False):
 def main():
     """Generate all visualizations for Blog 21."""
     set_tufte_defaults()
-    logger.info("="*70)
     logger.info("Blog 21: Sedona Drill Hole Analytics - Visualizations")
-    logger.info("="*70)
     logger.info()
     
     create_main_density_heatmap()
     
     logger.info()
-    logger.info("="*70)
     logger.info("All visualizations generated successfully!")
-    logger.info("="*70)
     logger.info()
     logger.info("Files created:")
     logger.info("  - 21_sedona_drillholes_main.png")
