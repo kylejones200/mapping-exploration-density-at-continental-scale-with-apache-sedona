@@ -1,6 +1,4 @@
 import signalplot
-import sys
-import os
 
 import logging
 logging.basicConfig(
@@ -21,7 +19,6 @@ from matplotlib.patches import RegularPolygon
 
 
 
-from pathlib import Path
 
 def apply_minimalist_style_manual(ax):
     """Apply minimalist style components manually to axis."""
@@ -126,8 +123,8 @@ def create_main_density_heatmap(plot: bool = False):
             ax.plot(lon, lat, 'w*', markersize=15, markeredgecolor='black',
                    markeredgewidth=1.5, zorder=10)
             ax.text(lon, lat-0.3, name, fontsize=9, ha='center',
-                   bbox=dict(boxstyle='round', facecolor='white', alpha=0.8,
-                            edgecolor='black'))
+                   bbox={'boxstyle': 'round', 'facecolor': 'white', 'alpha': 0.8,
+                            'edgecolor': 'black'})
     
         apply_minimalist_style_manual(ax)
     
@@ -166,15 +163,15 @@ def create_main_density_heatmap(plot: bool = False):
         ax.text(0.98, 0.98, stats_text,
                transform=ax.transAxes, fontsize=9,
                verticalalignment='top', horizontalalignment='right',
-               bbox=dict(boxstyle='round', facecolor='white', alpha=0.9,
-                        edgecolor='black', linewidth=1.5))
+               bbox={'boxstyle': 'round', 'facecolor': 'white', 'alpha': 0.9,
+                        'edgecolor': 'black', 'linewidth': 1.5})
     
         plt.tight_layout()
         plt.savefig('/Users/k.jones/Desktop/blogs/blog_posts/21_sedona_drillholes_main.png', 
                     dpi=300, bbox_inches='tight')
         plt.close()
     
-    logger.info(f"✓ Main density heatmap saved")
+    logger.info("✓ Main density heatmap saved")
     logger.info(f"  Total hexagons: {len(hex_stats)}")
     logger.info(f"  Coverage: {pct_explored:.1f}%")
 
