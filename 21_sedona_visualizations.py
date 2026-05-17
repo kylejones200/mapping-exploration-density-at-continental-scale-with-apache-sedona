@@ -241,7 +241,7 @@ def create_main_density_heatmap(plot: bool = False):
 
         plt.tight_layout()
         plt.savefig(
-            "/Users/k.jones/Desktop/blogs/blog_posts/21_sedona_drillholes_main.png",
+            "outputs/21_sedona_drillholes_main.png",
             dpi=300,
             bbox_inches="tight",
         )

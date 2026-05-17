@@ -1,0 +1,22 @@
+[project]
+name = "mapping-exploration-density-at-continental-scale-with-apache-sedona"
+version = "0.1.0"
+description = "Companion code for Medium article: mapping exploration density at continental scale with apache sedona"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "matplotlib>=3.10.9",
+    "numpy>=2.4.4",
+    "pandas>=2.3.3",
+    "signalplot>=0.1",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
