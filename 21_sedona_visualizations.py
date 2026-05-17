@@ -120,12 +120,12 @@ def create_main_density_heatmap(plot: bool = False):
         )  # Light gray default
 
         # Vectorized plotting using list comprehension (still faster than iterrows)
-        for _, row in hex_stats.iterrows():
+        for row in hex_stats.itertuples(index=False):
             hex_patch = RegularPolygon(
-                (row["center_lon"], row["center_lat"]),
+                (row.center_lon, row.center_lat),
                 numVertices=6,
                 radius=hex_size / 2,
-                facecolor=row["color"],
+                facecolor=row.color,
                 edgecolor="white",
                 linewidth=0.5,
                 alpha=0.8,
