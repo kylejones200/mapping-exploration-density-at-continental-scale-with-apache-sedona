@@ -1,6 +1,6 @@
-# Repository
+# Mapping Exploration Density at Continental Scale with Apache Sedona
 
-Companion code for a Medium article.
+Companion code for the Medium article on spatial drill hole analytics.
 
 ## Business context
 

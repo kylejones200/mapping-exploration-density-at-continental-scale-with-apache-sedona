@@ -179,8 +179,6 @@ def create_main_density_heatmap(plot: bool = False):
         )
         # Add statistics box
         n_dense = len(hex_stats[hex_stats["density"] > 30])
-        n_unexplored = len(hex_stats[hex_stats["density"] < 0.5])
-        pct_explored = (1 - n_unexplored / len(hex_stats)) * 100
         stats_text = (
             f"Coverage Analysis:\n"
             f"Total hexagons: {len(hex_stats)}\n"
@@ -212,6 +210,8 @@ def create_main_density_heatmap(plot: bool = False):
         )
         plt.close()
 
+    n_unexplored = len(hex_stats[hex_stats["density"] < 0.5])
+    pct_explored = (1 - n_unexplored / len(hex_stats)) * 100
     logger.info("✓ Main density heatmap saved")
     logger.info(f"  Total hexagons: {len(hex_stats)}")
     logger.info(f"  Coverage: {pct_explored:.1f}%")
@@ -221,11 +221,11 @@ def main():
     """Generate all visualizations for Blog 21."""
     signalplot.apply(font_family="serif")
     logger.info("Blog 21: Sedona Drill Hole Analytics - Visualizations")
-    logger.info()
+    logger.info("=" * 60)
     create_main_density_heatmap()
-    logger.info()
+    logger.info("=" * 60)
     logger.info("All visualizations generated successfully!")
-    logger.info()
+    logger.info("=" * 60)
     logger.info("Files created:")
     logger.info("  - 21_sedona_drillholes_main.png")
 
